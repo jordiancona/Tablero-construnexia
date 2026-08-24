@@ -20,10 +20,14 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
+    const targetUrl = (import.meta as any).env?.VITE_API_URL || window.location.origin;
+    const token = localStorage.getItem('tablero_auth_token');
+
     // Conectar WebSocket al servidor Node.js/Fastify
-    const socketInstance = io(window.location.origin, {
+    const socketInstance = io(targetUrl, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
+      auth: { token },
     });
 
     socketInstance.on('connect', () => {
