@@ -18,6 +18,8 @@ interface AuthContextType {
   logout: () => void;
 }
 
+const API_BASE_URL = ((import.meta as any).env?.VITE_API_URL || '') + '/api';
+
 const AuthContext = createContext<AuthContextType>({
   user: null,
   token: null,
@@ -52,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogleToken = async (idToken: string) => {
     try {
-      const res = await axios.post('/api/auth/google', { idToken });
+      const res = await axios.post(`${API_BASE_URL}/auth/google`, { idToken });
       const { token: jwtToken, user: userData } = res.data;
 
       setToken(jwtToken);
@@ -68,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithDemo = async (email: string, name: string, avatar?: string) => {
     try {
-      const res = await axios.post('/api/auth/google', {
+      const res = await axios.post(`${API_BASE_URL}/auth/google`, {
         demoUser: { email, name, avatar },
       });
       const { token: jwtToken, user: userData } = res.data;
