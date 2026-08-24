@@ -1,0 +1,32 @@
+{
+  "name": "tablero-backend",
+  "version": "1.0.0",
+  "description": "Backend API para Tablero Kanban con Fastify, Prisma y Socket.io",
+  "main": "dist/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/jwt": "^8.0.1",
+    "@prisma/client": "^5.19.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.28.1",
+    "google-auth-library": "^9.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.14.9",
+    "prisma": "^5.19.1",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.2"
+  }
+}
