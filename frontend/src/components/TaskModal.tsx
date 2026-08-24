@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check } from 'lucide-react';
-import { Task, Priority } from '../types/kanban';
+import { X, Check, UserCheck } from 'lucide-react';
+import { Task, Priority, UserSummary } from '../types/kanban';
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { title: string; description: string; priority: Priority }) => void;
+  onSave: (data: { title: string; description: string; priority: Priority; assignedToId?: string | null }) => void;
   taskToEdit?: Task | null;
+  users: UserSummary[];
 }
 
 export const TaskModal: React.FC<TaskModalProps> = ({
@@ -14,20 +15,24 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   onClose,
   onSave,
   taskToEdit,
+  users,
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<Priority>('MEDIUM');
+  const [assignedToId, setAssignedToId] = useState<string>('');
 
   useEffect(() => {
     if (taskToEdit) {
       setTitle(taskToEdit.title);
       setDescription(taskToEdit.description || '');
       setPriority(taskToEdit.priority);
+      setAssignedToId(taskToEdit.assignedToId || '');
     } else {
       setTitle('');
       setDescription('');
       setPriority('MEDIUM');
+      setAssignedToId('');
     }
   }, [taskToEdit, isOpen]);
 
@@ -36,7 +41,12 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
-    onSave({ title: title.trim(), description: description.trim(), priority });
+    onSave({
+      title: title.trim(),
+      description: description.trim(),
+      priority,
+      assignedToId: assignedToId || null,
+    });
     onClose();
   };
 
@@ -83,34 +93,40 @@ export const TaskModal: React.FC<TaskModalProps> = ({
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-              Nivel de Prioridad
-            </label>
-            <div className="grid grid-cols-4 gap-2">
-              {(['LOW', 'MEDIUM', 'HIGH', 'URGENT'] as Priority[]).map((p) => {
-                const labels: Record<Priority, string> = {
-                  LOW: 'Baja',
-                  MEDIUM: 'Media',
-                  HIGH: 'Alta',
-                  URGENT: 'Urgente',
-                };
-                const isSelected = priority === p;
-                return (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => setPriority(p)}
-                    className={`py-2 px-1 text-xs font-semibold rounded-xl border transition-all text-center cursor-pointer ${
-                      isSelected
-                        ? 'bg-indigo-600/30 text-indigo-300 border-indigo-500 ring-2 ring-indigo-500/30'
-                        : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
-                    }`}
-                  >
-                    {labels[p]}
-                  </button>
-                );
-              })}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                Nivel de Prioridad
+              </label>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value as Priority)}
+                className="w-full bg-slate-950/90 text-sm text-slate-100 rounded-xl px-3 py-2.5 border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-inner cursor-pointer"
+              >
+                <option value="LOW">🔵 Baja</option>
+                <option value="MEDIUM">🟢 Media</option>
+                <option value="HIGH">🟡 Alta</option>
+                <option value="URGENT">🔴 Urgente</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
+                Persona Asignada
+              </label>
+              <select
+                value={assignedToId}
+                onChange={(e) => setAssignedToId(e.target.value)}
+                className="w-full bg-slate-950/90 text-sm text-slate-100 rounded-xl px-3 py-2.5 border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-inner cursor-pointer"
+              >
+                <option value="">👤 Sin Asignar</option>
+                {users.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name} ({u.email})
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

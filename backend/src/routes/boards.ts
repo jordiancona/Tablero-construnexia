@@ -11,7 +11,13 @@ export async function boardRoutes(fastify: FastifyInstance) {
         include: {
           columns: {
             include: {
-              tasks: true,
+              tasks: {
+                include: {
+                  assignedToUser: {
+                    select: { id: true, name: true, email: true, avatar: true },
+                  },
+                },
+              },
             },
           },
         },
@@ -23,7 +29,7 @@ export async function boardRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // Obtener un tablero por ID con columnas y tareas ordenadas
+  // Obtener un tablero por ID con columnas, tareas ordenadas y responsables
   fastify.get<{ Params: { id: string } }>('/api/boards/:id', async (request, reply) => {
     const { id } = request.params;
     try {
@@ -35,6 +41,11 @@ export async function boardRoutes(fastify: FastifyInstance) {
             include: {
               tasks: {
                 orderBy: { order: 'asc' },
+                include: {
+                  assignedToUser: {
+                    select: { id: true, name: true, email: true, avatar: true },
+                  },
+                },
               },
             },
           },
@@ -89,7 +100,15 @@ export async function boardRoutes(fastify: FastifyInstance) {
           include: {
             columns: {
               orderBy: { order: 'asc' },
-              include: { tasks: true },
+              include: {
+                tasks: {
+                  include: {
+                    assignedToUser: {
+                      select: { id: true, name: true, email: true, avatar: true },
+                    },
+                  },
+                },
+              },
             },
           },
         });

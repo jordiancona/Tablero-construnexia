@@ -1,9 +1,15 @@
 import axios from 'axios';
-import { Board, Column, Task, ActivityLog, Priority } from '../types/kanban';
+import { Board, Column, Task, ActivityLog, Priority, UserSummary } from '../types/kanban';
 
 const API_BASE_URL = ((import.meta as any).env?.VITE_API_URL || '') + '/api';
 
 export const api = {
+  // Usuarios
+  getUsers: async (): Promise<UserSummary[]> => {
+    const res = await axios.get(`${API_BASE_URL}/users`);
+    return res.data;
+  },
+
   // Tableros
   getBoards: async (): Promise<Board[]> => {
     const res = await axios.get(`${API_BASE_URL}/boards`);
@@ -50,6 +56,7 @@ export const api = {
     priority?: Priority;
     columnId: string;
     boardId: string;
+    assignedToId?: string | null;
   }): Promise<Task> => {
     const res = await axios.post(`${API_BASE_URL}/tasks`, data);
     return res.data;
@@ -63,6 +70,7 @@ export const api = {
       priority?: Priority;
       columnId?: string;
       boardId: string;
+      assignedToId?: string | null;
     }
   ): Promise<Task> => {
     const res = await axios.put(`${API_BASE_URL}/tasks/${id}`, data);

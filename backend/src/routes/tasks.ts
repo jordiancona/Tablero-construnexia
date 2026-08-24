@@ -12,9 +12,10 @@ export async function taskRoutes(fastify: FastifyInstance) {
       priority?: Priority;
       columnId: string;
       boardId: string;
+      assignedToId?: string | null;
     };
   }>('/api/tasks', async (request, reply) => {
-    const { title, description, priority = 'MEDIUM', columnId, boardId } = request.body;
+    const { title, description, priority = 'MEDIUM', columnId, boardId, assignedToId } = request.body;
 
     if (!title || !columnId || !boardId) {
       return reply.status(400).send({ error: 'Título, columnId y boardId son requeridos' });
@@ -35,14 +36,25 @@ export async function taskRoutes(fastify: FastifyInstance) {
           priority,
           order: newOrder,
           columnId,
+          assignedToId: assignedToId || null,
+        },
+        include: {
+          assignedToUser: {
+            select: { id: true, name: true, email: true, avatar: true },
+          },
         },
       });
+
+      let assigneeMsg = '';
+      if (task.assignedToUser) {
+        assigneeMsg = ` asignada a ${task.assignedToUser.name}`;
+      }
 
       await prisma.activityLog.create({
         data: {
           boardId,
           action: 'TASK_CREATED',
-          details: `Tarea "${task.title}" creada en la columna.`,
+          details: `Tarea "${task.title}" creada${assigneeMsg}.`,
         },
       });
 
@@ -63,10 +75,11 @@ export async function taskRoutes(fastify: FastifyInstance) {
       priority?: Priority;
       columnId?: string;
       boardId: string;
+      assignedToId?: string | null;
     };
   }>('/api/tasks/:id', async (request, reply) => {
     const { id } = request.params;
-    const { title, description, priority, columnId, boardId } = request.body;
+    const { title, description, priority, columnId, boardId, assignedToId } = request.body;
 
     try {
       const updatedTask = await prisma.task.update({
@@ -76,6 +89,12 @@ export async function taskRoutes(fastify: FastifyInstance) {
           ...(description !== undefined && { description: description.trim() }),
           ...(priority && { priority }),
           ...(columnId && { columnId }),
+          ...(assignedToId !== undefined && { assignedToId: assignedToId || null }),
+        },
+        include: {
+          assignedToUser: {
+            select: { id: true, name: true, email: true, avatar: true },
+          },
         },
       });
 

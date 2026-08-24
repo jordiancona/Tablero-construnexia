@@ -10,12 +10,12 @@ import { LoginView } from './components/LoginView';
 import { useSocket } from './context/SocketContext';
 import { useAuth } from './context/AuthContext';
 import { api } from './services/api';
-import { Board, Column, Task, ActivityLog, Priority } from './types/kanban';
+import { Board, Column, Task, ActivityLog, Priority, UserSummary } from './types/kanban';
 
 const sampleBoard: Board = {
   id: 'board-demo-1',
   title: '🚀 Proyecto ConstruNexia Demo',
-  description: 'Tablero Kanban interactivo protegido con autenticación de Google y WebSockets.',
+  description: 'Tablero Kanban interactivo protegido con autenticación de Google y asignación de tareas.',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   columns: [
@@ -93,11 +93,13 @@ const sampleBoard: Board = {
 };
 
 export const AppContent: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user: currentUser, isAuthenticated, isLoading } = useAuth();
   const [boards, setBoards] = useState<Board[]>([sampleBoard]);
   const [currentBoard, setCurrentBoard] = useState<Board>(sampleBoard);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedAssigneeFilter, setSelectedAssigneeFilter] = useState<string>('ALL');
   const [activities, setActivities] = useState<ActivityLog[]>([]);
+  const [users, setUsers] = useState<UserSummary[]>([]);
 
   // Modales state
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -111,6 +113,17 @@ export const AppContent: React.FC = () => {
   const [isActivityOpen, setIsActivityOpen] = useState(false);
 
   const { socket, joinBoard, leaveBoard } = useSocket();
+
+  // Cargar lista de miembros del equipo
+  const fetchUsers = useCallback(async () => {
+    if (!isAuthenticated) return;
+    try {
+      const uList = await api.getUsers();
+      if (uList) setUsers(uList);
+    } catch (err) {
+      console.warn('⚠️ No se pudo obtener la lista de usuarios:', err);
+    }
+  }, [isAuthenticated]);
 
   // Cargar tableros desde la API REST
   const loadBoards = useCallback(async () => {
@@ -142,8 +155,9 @@ export const AppContent: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) {
       loadBoards();
+      fetchUsers();
     }
-  }, [isAuthenticated, loadBoards]);
+  }, [isAuthenticated, loadBoards, fetchUsers]);
 
   // Escuchar salas de Socket.io
   useEffect(() => {
@@ -218,13 +232,21 @@ export const AppContent: React.FC = () => {
     setIsTaskModalOpen(true);
   };
 
-  const handleSaveTask = async (data: { title: string; description: string; priority: Priority }) => {
+  const handleSaveTask = async (data: {
+    title: string;
+    description: string;
+    priority: Priority;
+    assignedToId?: string | null;
+  }) => {
+    const selectedUser = users.find((u) => u.id === data.assignedToId);
+
     if (taskToEdit) {
       try {
         await api.updateTask(taskToEdit.id, {
           title: data.title,
           description: data.description,
           priority: data.priority,
+          assignedToId: data.assignedToId,
           boardId: currentBoard.id,
         });
         await fetchBoardDetails(currentBoard.id);
@@ -235,7 +257,14 @@ export const AppContent: React.FC = () => {
             ...col,
             tasks: col.tasks.map((t) =>
               t.id === taskToEdit.id
-                ? { ...t, title: data.title, description: data.description, priority: data.priority }
+                ? {
+                    ...t,
+                    title: data.title,
+                    description: data.description,
+                    priority: data.priority,
+                    assignedToId: data.assignedToId,
+                    assignedToUser: selectedUser || null,
+                  }
                 : t
             ),
           })),
@@ -247,6 +276,7 @@ export const AppContent: React.FC = () => {
           title: data.title,
           description: data.description,
           priority: data.priority,
+          assignedToId: data.assignedToId,
           columnId: targetColumnId,
           boardId: currentBoard.id,
         });
@@ -259,6 +289,8 @@ export const AppContent: React.FC = () => {
           priority: data.priority,
           order: 99,
           columnId: targetColumnId,
+          assignedToId: data.assignedToId,
+          assignedToUser: selectedUser || null,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -413,12 +445,17 @@ export const AppContent: React.FC = () => {
         onSearchChange={setSearchQuery}
         onAddColumnClick={handleOpenAddColumn}
         onDeleteBoardClick={handleDeleteBoard}
+        users={users}
+        selectedAssigneeFilter={selectedAssigneeFilter}
+        onAssigneeFilterChange={setSelectedAssigneeFilter}
+        currentUserId={currentUser?.id}
       />
 
       <main className="flex-1">
         <KanbanBoard
           board={currentBoard}
           searchQuery={searchQuery}
+          selectedAssigneeFilter={selectedAssigneeFilter}
           onAddTask={handleOpenAddTask}
           onEditColumn={handleOpenEditColumn}
           onDeleteColumn={handleDeleteColumn}
@@ -434,6 +471,7 @@ export const AppContent: React.FC = () => {
         onClose={() => setIsTaskModalOpen(false)}
         onSave={handleSaveTask}
         taskToEdit={taskToEdit}
+        users={users}
       />
 
       <ColumnModal

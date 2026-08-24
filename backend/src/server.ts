@@ -8,6 +8,7 @@ import { boardRoutes } from './routes/boards';
 import { columnRoutes } from './routes/columns';
 import { taskRoutes } from './routes/tasks';
 import { activityRoutes } from './routes/activity';
+import { userRoutes } from './routes/users';
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ async function start() {
 
     // Registrar rutas REST
     await fastify.register(authRoutes);
+    await fastify.register(userRoutes);
     await fastify.register(boardRoutes);
     await fastify.register(columnRoutes);
     await fastify.register(taskRoutes);

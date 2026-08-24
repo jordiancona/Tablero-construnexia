@@ -19,6 +19,7 @@ import { TaskCard } from './TaskCard';
 interface KanbanBoardProps {
   board: Board;
   searchQuery: string;
+  selectedAssigneeFilter: string;
   onAddTask: (columnId: string) => void;
   onEditColumn: (column: Column) => void;
   onDeleteColumn: (columnId: string) => void;
@@ -31,6 +32,7 @@ interface KanbanBoardProps {
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   board,
   searchQuery,
+  selectedAssigneeFilter,
   onAddTask,
   onEditColumn,
   onDeleteColumn,
@@ -55,17 +57,32 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
   const columnIds = useMemo(() => board.columns.map((c) => c.id), [board.columns]);
 
-  // Filtrar tareas según la búsqueda de la barra superior
+  // Filtrar tareas según la búsqueda de texto y el responsable seleccionado
   const filteredColumns = useMemo(() => {
-    if (!searchQuery.trim()) return board.columns;
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.toLowerCase().trim();
+
     return board.columns.map((col) => ({
       ...col,
-      tasks: col.tasks.filter(
-        (t) => t.title.toLowerCase().includes(q) || t.description?.toLowerCase().includes(q)
-      ),
+      tasks: col.tasks.filter((t) => {
+        // Filtro de texto
+        const matchesText =
+          !q ||
+          t.title.toLowerCase().includes(q) ||
+          t.description?.toLowerCase().includes(q) ||
+          t.assignedToUser?.name.toLowerCase().includes(q);
+
+        // Filtro de responsable
+        let matchesAssignee = true;
+        if (selectedAssigneeFilter === 'UNASSIGNED') {
+          matchesAssignee = !t.assignedToId;
+        } else if (selectedAssigneeFilter !== 'ALL') {
+          matchesAssignee = t.assignedToId === selectedAssigneeFilter;
+        }
+
+        return matchesText && matchesAssignee;
+      }),
     }));
-  }, [board.columns, searchQuery]);
+  }, [board.columns, searchQuery, selectedAssigneeFilter]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { current } = event.active.data;
@@ -100,7 +117,6 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       const overTaskItem = over.data.current?.task as Task;
 
       if (activeTaskItem && overTaskItem && activeTaskItem.columnId !== overTaskItem.columnId) {
-        // Mover dinámicamente entre columnas durante el arrastre
         const sourceCol = board.columns.find((c) => c.id === activeTaskItem.columnId);
         const destCol = board.columns.find((c) => c.id === overTaskItem.columnId);
 
@@ -166,7 +182,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       return;
     }
 
-    // Arrastre de tareas final: recalcular orden global y enviar a backend
+    // Arrastre de tareas final
     if (active.data.current?.type === 'Task') {
       const taskListUpdates: { id: string; columnId: string; order: number }[] = [];
       board.columns.forEach((col) => {
@@ -204,7 +220,6 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           </SortableContext>
         </div>
 
-        {/* Drag Overlay para animación personalizada */}
         <DragOverlay>
           {activeColumn && (
             <ColumnContainer

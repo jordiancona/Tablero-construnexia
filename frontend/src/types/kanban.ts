@@ -1,5 +1,12 @@
 export type Priority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
 
+export interface UserSummary {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string | null;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -7,6 +14,8 @@ export interface Task {
   priority: Priority;
   order: number;
   columnId: string;
+  assignedToId?: string | null;
+  assignedToUser?: UserSummary | null;
   createdAt: string;
   updatedAt: string;
 }

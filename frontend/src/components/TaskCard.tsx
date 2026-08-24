@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Edit3, Trash2, Calendar, AlertCircle } from 'lucide-react';
+import { GripVertical, Edit3, Trash2, Calendar, AlertCircle, User } from 'lucide-react';
 import { Task, Priority } from '../types/kanban';
 
 interface TaskCardProps {
@@ -129,14 +129,34 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, isOv
         </p>
       )}
 
-      {/* Footer info */}
+      {/* Footer info: Date & Assigned user */}
       <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-800/60 mt-2">
         <span className="flex items-center gap-1">
           <Calendar className="w-3 h-3 text-slate-500" />
           {formattedDate}
         </span>
 
-        <span className="text-[10px] font-mono text-slate-600">ID: {task.id.slice(0, 6)}</span>
+        {task.assignedToUser ? (
+          <div
+            className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-slate-300"
+            title={`Asignado a: ${task.assignedToUser.name} (${task.assignedToUser.email})`}
+          >
+            {task.assignedToUser.avatar ? (
+              <img
+                src={task.assignedToUser.avatar}
+                alt={task.assignedToUser.name}
+                className="w-4 h-4 rounded-full"
+              />
+            ) : (
+              <User className="w-3 h-3 text-indigo-400" />
+            )}
+            <span className="text-[10px] font-bold max-w-[80px] truncate">
+              {task.assignedToUser.name.split(' ')[0]}
+            </span>
+          </div>
+        ) : (
+          <span className="text-[10px] font-mono text-slate-600">Sin asignar</span>
+        )}
       </div>
     </div>
   );
