@@ -44,29 +44,26 @@ export const LoginView: React.FC = () => {
             <LayoutGrid className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white">
-            Tablero <span className="text-indigo-400">ConstruNexia</span>
+            Tablero <span className="text-indigo-400">NextBoard</span>
           </h1>
           <p className="text-sm text-slate-400 max-w-md mx-auto">
-            Plataforma de gestión de proyectos Kanban en tiempo real con React, Fastify y Socket.io.
+            Plataforma de gestión de proyectos Kanban en tiempo real.
           </p>
         </div>
 
         {/* Feature Badges */}
         <div className="grid grid-cols-3 gap-3 pt-2">
           <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center space-y-1">
-            <Zap className="w-4 h-4 text-indigo-400 mx-auto" />
-            <p className="text-[11px] font-bold text-slate-200">Tiempo Real</p>
-            <p className="text-[10px] text-slate-500">Socket.io</p>
+            <Zap className="w-6 h-6 text-indigo-400 mx-auto" />
+            <p className="text-base font-bold text-slate-200">Tiempo Real</p>
           </div>
           <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center space-y-1">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 mx-auto" />
-            <p className="text-[11px] font-bold text-slate-200">Autenticación</p>
-            <p className="text-[10px] text-slate-500">Google OAuth</p>
+            <ShieldCheck className="w-6 h-6 text-emerald-400 mx-auto" />
+            <p className="text-base font-bold text-slate-200">Autenticación</p>
           </div>
           <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-center space-y-1">
-            <Users className="w-4 h-4 text-sky-400 mx-auto" />
-            <p className="text-[11px] font-bold text-slate-200">Persistencia</p>
-            <p className="text-[10px] text-slate-500">PostgreSQL</p>
+            <Users className="w-6 h-6 text-sky-400 mx-auto" />
+            <p className="text-base font-bold text-slate-200">Persistencia</p>
           </div>
         </div>
 
