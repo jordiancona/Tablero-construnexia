@@ -1,4 +1,4 @@
-# 🚀 Tablero ConstruNexia - Kanban Real-Time
+# Tablero de Tickets - Kanban Real-Time
 
 Sistema completo de gestión de tareas y tablero Kanban interactivo en tiempo real con autenticación protegida de **Google OAuth 2.0**.
 
