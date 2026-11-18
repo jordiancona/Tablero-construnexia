@@ -23,22 +23,19 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { user, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-30 w-full glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3 transition-all">
+    <header className="sticky top-0 z-30 w-full glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-6 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Brand & Logo */}
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-lg shadow-indigo-500/25 ring-1 ring-white/20">
-            <LayoutGrid className="w-5 h-5 text-white" />
+            <LayoutGrid className="w-6 h-6 text-white" />
             <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full ring-2 ring-slate-950 animate-pulse" />
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight text-white flex items-center gap-2">
-              Constru<span className="text-indigo-400">Nexia</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 font-medium border border-indigo-500/20">
-                Kanban Real-Time
-              </span>
+              Tablero<span className="text-indigo-400">NextBoard</span>
             </h1>
-            <p className="text-xs text-slate-400 hidden sm:block">Tablero de Control y Gestión</p>
+            <p className="text-sm text-slate-400 hidden sm:block">Tablero de Control y Gestión</p>
           </div>
         </div>
 
@@ -89,14 +86,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="hidden md:inline">{isConnected ? 'En vivo' : 'Desconectado'}</span>
           </div>
 
-          <button
-            onClick={onToggleActivity}
-            className="p-2 text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800/80 rounded-lg border border-slate-800 transition-all cursor-pointer"
-            title="Ver Historial de Actividad"
-          >
-            <Activity className="w-4 h-4" />
-          </button>
-
           {/* User Profile & Logout */}
           {user && (
             <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
@@ -111,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <User className="w-4 h-4" />
                 </div>
               )}
-              <span className="text-xs font-bold text-slate-200 hidden lg:inline max-w-[120px] truncate">
+              <span className="text-sm font-bold text-slate-200 hidden lg:inline max-w-[120px] truncate">
                 {user.name}
               </span>
               <button
@@ -119,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all cursor-pointer"
                 title="Cerrar Sesión"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-6 h-6" />
               </button>
             </div>
           )}

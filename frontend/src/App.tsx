@@ -14,7 +14,7 @@ import { Board, Column, Task, ActivityLog, Priority, UserSummary } from './types
 
 const sampleBoard: Board = {
   id: 'board-demo-1',
-  title: '🚀 Proyecto ConstruNexia Demo',
+  title: '🚀 Proyecto ConstruNexia',
   description: 'Tablero Kanban interactivo protegido con autenticación de Google y asignación de tareas.',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),

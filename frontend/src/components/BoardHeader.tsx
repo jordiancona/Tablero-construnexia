@@ -43,7 +43,7 @@ export const BoardHeader: React.FC<BoardHeaderProps> = ({
             </button>
           </div>
           <p className="text-sm text-slate-400 max-w-2xl">{board.description || 'Sin descripción'}</p>
-          <div className="flex items-center gap-4 text-xs font-medium text-slate-400 pt-2">
+          <div className="flex items-center gap-4 text-sm font-medium text-slate-400 pt-2">
             <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700/50">
               <Columns className="w-3.5 h-3.5 text-indigo-400" />
               {board.columns.length} Columnas
@@ -62,7 +62,7 @@ export const BoardHeader: React.FC<BoardHeaderProps> = ({
             <div className="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800">
               <button
                 onClick={() => onAssigneeFilterChange('ALL')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg transition-all cursor-pointer ${
                   selectedAssigneeFilter === 'ALL'
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-slate-200'
@@ -92,11 +92,11 @@ export const BoardHeader: React.FC<BoardHeaderProps> = ({
               onChange={(e) => onAssigneeFilterChange(e.target.value)}
               className="bg-slate-950/80 text-xs font-semibold text-slate-200 rounded-xl px-3 py-2 border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 cursor-pointer shadow-inner pr-8"
             >
-              <option value="ALL">👥 Todos los Responsables</option>
-              <option value="UNASSIGNED">👤 Sin Asignar</option>
+              <option value="ALL"><Users className="w-3.5 h-3.5"/> Todos los Responsables</option>
+              <option value="UNASSIGNED">Sin Asignar</option>
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
-                  👤 {u.name}
+                  {u.name}
                 </option>
               ))}
             </select>
@@ -109,13 +109,13 @@ export const BoardHeader: React.FC<BoardHeaderProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Buscar tarea..."
-              className="w-full bg-slate-950/80 text-xs text-slate-200 pl-9 pr-4 py-2 rounded-xl border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-slate-500 shadow-inner"
+              className="w-full bg-slate-950/80 text-sm text-slate-200 pl-9 pr-4 py-2 rounded-xl border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-slate-500 shadow-inner"
             />
           </div>
 
           <button
             onClick={onAddColumnClick}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700/60 transition-all hover:border-slate-600 shadow-md active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700/60 transition-all hover:border-slate-600 shadow-md active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4 text-indigo-400" />
             <span>Agregar Columna</span>

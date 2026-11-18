@@ -99,27 +99,26 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, isOv
             className="p-1 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded transition-all cursor-pointer"
             title="Editar Tarea"
           >
-            <Edit3 className="w-3.5 h-3.5" />
+            <Edit3 className="w-4 h-4" />
           </button>
           <button
             onClick={() => onDelete(task.id)}
             className="p-1 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded transition-all cursor-pointer"
             title="Eliminar Tarea"
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-4 h-4" />
           </button>
           <div
             {...attributes}
             {...listeners}
-            className="p-1 text-slate-500 hover:text-slate-300 cursor-grab active:cursor-grabbing rounded"
-          >
+            className="p-1 text-slate-500 hover:text-slate-300 cursor-grab active:cursor-grabbing rounded">
             <GripVertical className="w-4 h-4" />
           </div>
         </div>
       </div>
 
       {/* Task Content */}
-      <h4 className="text-sm font-bold text-slate-100 mb-1 leading-snug line-clamp-2">
+      <h4 className="text-base font-bold text-slate-100 mb-1 leading-snug line-clamp-2">
         {task.title}
       </h4>
 
@@ -130,9 +129,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, isOv
       )}
 
       {/* Footer info: Date & Assigned user */}
-      <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-800/60 mt-2">
+      <div className="flex items-center justify-between text-sm text-slate-500 pt-2 border-t border-slate-800/60 mt-2">
         <span className="flex items-center gap-1">
-          <Calendar className="w-3 h-3 text-slate-500" />
+          <Calendar className="w-5 h-5 text-slate-500" />
           {formattedDate}
         </span>
 
@@ -150,7 +149,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, isOv
             ) : (
               <User className="w-3 h-3 text-indigo-400" />
             )}
-            <span className="text-[10px] font-bold max-w-[80px] truncate">
+            <span className="text-sm font-bold max-w-[80px] truncate">
               {task.assignedToUser.name.split(' ')[0]}
             </span>
           </div>

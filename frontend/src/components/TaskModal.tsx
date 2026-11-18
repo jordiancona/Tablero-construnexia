@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, UserCheck } from 'lucide-react';
+import { X, Check, UserCheck, Sparkle, Sparkles, Plus, Pencil } from 'lucide-react';
 import { Task, Priority, UserSummary } from '../types/kanban';
 
 interface TaskModalProps {
@@ -55,7 +55,17 @@ export const TaskModal: React.FC<TaskModalProps> = ({
       <div className="w-full max-w-lg glass-panel rounded-2xl p-6 border border-slate-700/80 shadow-2xl space-y-6">
         <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
           <h3 className="text-lg font-extrabold text-white">
-            {taskToEdit ? '✏️ Editar Tarea' : '✨ Nueva Tarea'}
+            {taskToEdit ? (
+              <>
+                <Pencil className="w-5 h-5 inline me-2" />
+                <span>Editar Tarea</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-5 h-5 inline me-2" />
+                <span>Nueva Tarea</span>
+              </>
+            )}
           </h3>
           <button
             onClick={onClose}

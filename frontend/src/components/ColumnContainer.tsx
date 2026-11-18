@@ -77,7 +77,7 @@ export const ColumnContainer: React.FC<ColumnContainerProps> = ({
             <GripVertical className="w-4 h-4" />
           </div>
 
-          <h3 className="text-sm font-extrabold text-slate-100 truncate tracking-tight">
+          <h3 className="text-base font-extrabold text-slate-100 truncate tracking-tight">
             {column.title}
           </h3>
 
