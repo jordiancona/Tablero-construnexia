@@ -37,3 +37,18 @@ Tablero_construnexia/
 ├── .gitignore
 └── README.md
 ```
+
+## 🚀 Despliegue del frontend en Cloudflare Pages
+
+El frontend está preparado para desplegarse en Cloudflare Pages con la configuración
+de [frontend/wrangler.toml](frontend/wrangler.toml).
+
+- **Directorio raíz:** `frontend`
+- **Comando de build:** `npm run build`
+- **Directorio de salida:** `dist`
+- **Variable requerida:** `VITE_GOOGLE_CLIENT_ID`
+- **Variable requerida para producción:** `VITE_API_URL`, con la URL pública del backend sin `/api`
+
+La URL de Vercel puede mantenerse activa durante la migración. Cloudflare Pages
+solo aloja los archivos estáticos del frontend; la API y Socket.io deben seguir
+disponibles desde un backend público.
