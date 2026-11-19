@@ -105,7 +105,7 @@ export const ColumnContainer: React.FC<ColumnContainerProps> = ({
       </div>
 
       {/* Tasks List */}
-      <div className="flex-1 p-3 overflow-y-auto space-y-3 min-h-[150px]">
+      <div className="flex-1 min-h-0 p-3 overflow-y-auto space-y-3">
         <SortableContext items={taskIds}>
           {tasks.map((task) => (
             <TaskCard
