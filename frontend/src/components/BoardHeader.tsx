@@ -73,7 +73,7 @@ export const BoardHeader: React.FC<BoardHeaderProps> = ({
               </button>
               <button
                 onClick={() => onAssigneeFilterChange(currentUserId)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg transition-all cursor-pointer ${
                   selectedAssigneeFilter === currentUserId
                     ? 'bg-indigo-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-slate-200'
@@ -90,9 +90,9 @@ export const BoardHeader: React.FC<BoardHeaderProps> = ({
             <select
               value={selectedAssigneeFilter}
               onChange={(e) => onAssigneeFilterChange(e.target.value)}
-              className="bg-slate-950/80 text-xs font-semibold text-slate-200 rounded-xl px-3 py-2 border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 cursor-pointer shadow-inner pr-8"
+              className="bg-slate-950/80 text-sm font-semibold text-slate-200 rounded-xl px-3 py-2 border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 cursor-pointer shadow-inner pr-8"
             >
-              <option value="ALL"><Users className="w-3.5 h-3.5"/> Todos los Responsables</option>
+              <option value="ALL">Todos los Responsables</option>
               <option value="UNASSIGNED">Sin Asignar</option>
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
